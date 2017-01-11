@@ -313,7 +313,7 @@ class APIController extends BaseController {
 												"version" => $modversion->version,
 												"md5" => $modversion->md5,
 												"filesize" => $modversion->filesize,
-												"url" => Config::get('solder.mirror_url').'mods/'.$modversion->mod->name.'/'.$modversion->mod->name.'-'.$modversion->version.'.zip'
+												"url" => $modversion->getURL()
 												);
 				}
 				usort($response['mods'], function($a, $b){return strcasecmp($a['name'], $b['name']);});
@@ -336,7 +336,7 @@ class APIController extends BaseController {
 												"description" => $modversion->mod->description,
 												"link" => $modversion->mod->link,
 												"donate" => $modversion->mod->donatelink,
-												"url" => Config::get('solder.mirror_url').'mods/'.$modversion->mod->name.'/'.$modversion->mod->name.'-'.$modversion->version.'.zip'
+												"url" => $modversion->getURL()
 												);
 				}
 				usort($response['mods'], function($a, $b){return strcasecmp($a['name'], $b['name']);});

@@ -92,7 +92,9 @@
 								<td>
 									<input type="text" name="add-md5" id="add-md5" class="form-control"></td>
 								</td>
-								<td><span id="add-url">N/A</span></td>
+								<td>
+									<input type="text" name="add-url" id="add-url" class="form-control"></td>
+								</td>
 								<td>N/A</td>
 								<td><button type="submit" class="btn btn-success btn-small add">Add Version</button></td>
 							</form>
@@ -104,7 +106,7 @@
 								<td><i class="version-icon fa fa-plus" rel="{{ $ver->id }}"></i></td>
 								<td class="version" rel="{{ $ver->id }}">{{ $ver->version }}</td>
 								<td><input type="text" class="md5 form-control" name="md5" id="md5" placeholder="{{ $ver->md5 }}" rel="{{ $ver->id }}"></input></td>
-								<td class="url" rel="{{ $ver->id }}"><small><a href="{{ Config::get('solder.mirror_url').'mods/'.$mod->name.'/'.$mod->name.'-'.$ver->version.'.zip' }}">{{ Config::get('solder.mirror_url').'mods/'.$mod->name.'/'.$mod->name.'-'.$ver->version.'.zip' }}</a></small></td>
+								<td class="url" rel="{{ $ver->id }}"><small><a href="{{ $ver->getURL() }}">{{ $ver->getURL() }}</a></small></td>
 								<td>{{ $ver->humanFilesize("MB") }}</td>
 								<td><button type="submit" class="btn btn-primary btn-xs rehash" rel="{{ $ver->id }}">Rehash</button> <button class="btn btn-danger btn-xs delete" rel="{{ $ver->id }}">Delete</button>
 							</form>
@@ -133,7 +135,7 @@
 var mirror_url = '{{ Config::get("solder.mirror_url") }}';
 
 $('#add-version').keyup(function() {
-	$("#add-url").html('<a href="' + mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + $(this).val() + '.zip" target="_blank">' + mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + $(this).val() + '.zip</a>');
+	$("#add-url").attr('placeholder', mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + $(this).val() + '.zip')
 });
 
 $('#add').submit(function(e) {
@@ -146,10 +148,10 @@ $('#add').submit(function(e) {
 			data: $("#add").serialize(),
 			success: function (data) {
 				if (data.status == "success") {
-					$("#add-row").after('<tr><td></td><td>' + data.version + '</td><td>' + data.md5 + '</td><td><a href="' + mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + data.version + '.zip" target="_blank">' + mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + data.version + '.zip</a></td><td>' + data.filesize + '</td><td></td></tr>');
+					$("#add-row").after('<tr><td></td><td>' + data.version + '</td><td>' + data.md5 + '</td><td><a href="' + data.url + '" target="_blank">' + data.url + '</a></td><td>' + data.filesize + '</td><td></td></tr>');
 					$.jGrowl('Added mod version at ' + data.version, { group: 'alert-success' });
 				} else if (data.status == "warning") {
-					$("#add-row").after('<tr><td></td><td>' + data.version + '</td><td>' + data.md5 + '</td><td><a href="' + mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + data.version + '.zip" target="_blank">' + mirror_url + 'mods/{{ $mod->name }}/{{ $mod->name }}-' + data.version + '.zip</a></td><td>' + data.filesize + '</td><td></td></tr>');
+					$("#add-row").after('<tr><td></td><td>' + data.version + '</td><td>' + data.md5 + '</td><td><a href="' + data.url + '" target="_blank">' + data.url + '</a></td><td>' + data.filesize + '</td><td></td></tr>');
 					$.jGrowl('Added mod version at ' + data.version + ". " + data.reason, { group: 'alert-warning' });
 				} else {
 					$.jGrowl('Error: ' + data.reason, { group: 'alert-danger' });

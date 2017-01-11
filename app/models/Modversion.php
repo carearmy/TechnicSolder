@@ -24,6 +24,16 @@ class Modversion extends Eloquent {
 			return number_format($size/(1<<10),2)." KB";
 		return number_format($size)." bytes";
 	}
+
+	public function getURL()
+	{
+		if (empty($this->url))
+		{
+			return Config::get('solder.mirror_url').'mods/'.$this->mod->name.'/'.$this->mod->name.'-'.$this->version.'.zip';
+		} else {
+			return $this->url;
+		}
+	}
 }
 
 ?>
