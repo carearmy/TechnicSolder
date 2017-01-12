@@ -221,7 +221,7 @@ class ModController extends BaseController {
 							'reason' => 'Could not pull mod from database'
 							));
 
-			if (!filter_var($url, FILTER_VALIDATE_URL)) {
+			if (!empty($url) && !filter_var($url, FILTER_VALIDATE_URL)) {
 				return Response::json(array(
 							'status' => 'error',
 							'reason' => 'URL provided is not valid.',
